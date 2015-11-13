@@ -71,7 +71,7 @@ namespace :db do
 	  on roles(:db) do
 
 	  	within release_path do
-		     execute :wp, "db export #{fetch(:backup_file)} --add-drop-table"
+		     execute :wp, "db export #{fetch(:backup_file)} --add-drop-table --allow-root"
 		  end
 
 		 system('mkdir -p db_backups')
@@ -91,8 +91,8 @@ namespace :db do
 		on roles(:db) do
 
 			run_locally do
-				execute :wp, "db import db_backups/#{fetch(:backup_filename)}.sql"
-				execute :wp, "search-replace #{fetch(:stage_url)} #{fetch(:wp_localurl)}"
+				execute :wp, "db import db_backups/#{fetch(:backup_filename)}.sql --allow-root"
+				execute :wp, "search-replace #{fetch(:stage_url)} #{fetch(:wp_localurl)} --allow-root"
 				execute :rm, "db_backups/#{fetch(:backup_filename)}.sql"
 
 				if Dir['db_backups/*'].empty?
@@ -114,14 +114,14 @@ namespace :db do
 
 			run_locally do
 				execute :mkdir, "-p db_backups"
-				execute :wp, "db export db_backups/#{fetch(:backup_filename)}.sql --add-drop-table"
+				execute :wp, "db export db_backups/#{fetch(:backup_filename)}.sql --add-drop-table --allow-root"
 			end
 
 			upload! "db_backups/#{fetch(:backup_filename)}.sql", "#{fetch(:backup_file)}"
 
 			within release_path do
-				execute :wp, "db import #{fetch(:backup_file)}"
-				execute :wp, "search-replace #{fetch(:wp_localurl)} #{fetch(:stage_url)}"
+				execute :wp, "db import #{fetch(:backup_file)} --allow-root"
+				execute :wp, "search-replace #{fetch(:wp_localurl)} #{fetch(:stage_url)} --allow-root"
 				execute :rm, "#{fetch(:backup_file)}"
 			end
 
