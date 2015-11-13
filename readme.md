@@ -1,3 +1,5 @@
+*Warking: This is a fork that is tailored for a particular way of doing things f.e; wp install and db commands are run with the --allow-root flag, in order to be executed from the root user.*
+
 # wp-deploy
 
 A framework for deploying WordPress projects with Capistrano:
